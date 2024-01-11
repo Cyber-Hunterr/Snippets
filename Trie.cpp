@@ -85,6 +85,15 @@ struct BinTrie{
             cur->sz++;
         }
     }
+    bool search(int val){
+        node *cur = root;
+        for (int i = B - 1; i >= 0; i--){
+            int b = val >> i & 1;
+            if (cur->nxt[b] == NULL) return false;
+            cur = cur->nxt[b];
+        }
+        return true;
+    }
     int query(int x, int k){ // number of values s.t. val ^ x < k
         node *cur = root;
         int ans = 0;
@@ -123,5 +132,20 @@ struct BinTrie{
     void del(node *cur){
         for (int i = 0; i < 2; i++) if (cur->nxt[i]) del(cur->nxt[i]);
         delete (cur);
+    }
+    void del(int val){
+        if(!search(val)) return;
+        node *cur = root;
+        cur->sz--;
+        for (int i = B - 1; i >= 0; i--){
+            int b = val >> i & 1;
+            if (cur->nxt[b] == NULL) return;
+            else if(cur->nxt[b]->sz == 1){
+                cur->nxt[b] = NULL;
+                return;
+            }
+            cur = cur->nxt[b];
+            cur->sz--;
+        }
     }
 };

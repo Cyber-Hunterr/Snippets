@@ -17,10 +17,11 @@ using namespace std;
 #define ff first
 #define ss second
 #define PI 3.141592653589793238462
+
 #ifdef JAI_SHREE_KRISHNA
-#define dbg(x) cerr << #x << " : "; _print_(x);cerr << "\n";
+#include <debug.h>
 #else
-#define dbg(x)
+#define dbg(x...) 32
 #endif
 
 typedef long long ll;
@@ -35,28 +36,11 @@ typedef vector<vl> vvl;
 typedef vector<pii> vii;
 typedef vector<pll> vll;
 
-void _print_(ll t) {cerr << t;}
-void _print_(int t) {cerr << t;}
-void _print_(string t) {cerr << t;}
-void _print_(char t) {cerr << t;}
-void _print_(ld t) {cerr << t;}
-void _print_(double t) {cerr << t;}
-template <class T, class V> void _print_(pair <T, V> p) {cerr << "{"; _print_(p.ff); cerr << ","; _print_(p.ss); cerr << "}";}
-template <class T> void _print_(vector <T> v) {cerr << "[ "; for (T i : v) {_print_(i); cerr << " ";} cerr << "]";}
-template <class T> void _print_(set <T> v) {cerr << "[ "; for (T i : v) {_print_(i); cerr << " ";} cerr << "]";}
-template <class T> void _print_(multiset <T> v) {cerr << "[ "; for (T i : v) {_print_(i); cerr << " ";} cerr << "]";}
-template <class T, class V> void _print_(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print_(i); cerr << " ";} cerr << "]";}
-
-
 // Operator overloads
-template<typename T1, typename T2>              // cin >> pair<T1, T2>
-istream& operator>>(istream &istream, pair<T1, T2> &p) { return (istream >> p.first >> p.second); }
-template<typename T>                            // cin >> vector<T>
-istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;return istream;}
-template<typename T1, typename T2>              // cout << pair<T1, T2>
-ostream& operator<<(ostream &ostream, const pair<T1, T2> &p) { return (ostream << p.first << " " << p.second); }
-template<typename T>                            // cout << vector<T>
-ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
+template<typename T1, typename T2> istream& operator>>(istream &istream, pair<T1, T2> &p) { return (istream >> p.first >> p.second); }
+template<typename T> istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;return istream;}
+template<typename T1, typename T2> ostream& operator<<(ostream &ostream, const pair<T1, T2> &p) { return (ostream << p.first << " " << p.second); }
+template<typename T> ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 const ll mod = 1000000007;
 const ld eps = 1e-9;

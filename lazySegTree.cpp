@@ -12,24 +12,25 @@ struct Lsegtree{
     Lsegtree(ll n, T identity_element, U identity_update){ this->n = n; this->identity_element = identity_element; this->identity_update = identity_update; st.assign(4*n,identity_element); lazy.assign(4*n, identity_update);}
     
     
-    // change the following 2 functions, and you're more or less done.
+    // Combine two nodes l and r.
     T combine(T l, T r){
-        // change this function as required.
-        T ans = (l + r);
+        T ans = (l+r);	       // Sum
+        // T ans = min(l,r);	   // Min
+        // T ans = max(l,r);	   // Max
         return ans;
     }
-
+    
+    // Apply update upd to node curr which belongs to range [tl,tr].
     T apply(T curr, U upd, ll tl, ll tr){
-        T ans = (tr-tl+1)*upd;
-        // increment range by upd:
-        // T ans = curr + (tr - tl + 1)*upd
-
+        T ans = (tr-tl+1)*upd;             	 // set range to upd
+        // T ans = curr + (tr - tl + 1)*upd;    // increment range by upd
         return ans;
     }
 
+    // Combine an old update old_upd with a new update new_upd if the combination is for range [tl,tr].
     U combineUpdate(U old_upd, U new_upd, ll tl, ll tr){
-        U ans = old_upd;
-        ans=new_upd;
+        U ans = new_upd;         // Set to a value
+        // U ans = old_upd+new_upd; // Increase by a value
         return ans;
     }  
 
@@ -48,7 +49,7 @@ struct Lsegtree{
         //for the below line to work, make sure the "==" operator is defined for U.
         if(lazy[v] == identity_update)return;
         st[v] = apply(st[v], lazy[v], tl, tr);
-        if(2*v + 1 <= 4*n){
+        if(2*v + 2 < 4*n){
             ll tm = (tl + tr)>>1;
             lazy[2*v + 1] = combineUpdate(lazy[2*v+1], lazy[v], tl, tm);
             lazy[2*v + 2] = combineUpdate(lazy[2*v+2], lazy[v], tm+1,tr);            
