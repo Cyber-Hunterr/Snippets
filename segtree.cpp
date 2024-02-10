@@ -3,7 +3,11 @@ struct segtree{
     ll n; vector<T>st; T identity_element;
     // Definition of identity_element: the element I such that combine(x,I) = x
 
-    segtree(ll n, T identity_element){ this->n = n; this->identity_element = identity_element; st.assign(4*n,identity_element);}
+    segtree() {}
+    segtree(ll n,T identity_element){
+        init(n,identity_element);
+    }
+    void init(ll n, T identity_element){ this->n = n; this->identity_element = identity_element; st.assign(4*n,identity_element);}
     
     // Combine two nodes l and r.
     T combine(T l, T r){

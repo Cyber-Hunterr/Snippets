@@ -8,9 +8,11 @@ struct Lsegtree{
         Definition of identity_update: the element I such that apply(x,I) = x
         for all x        
     */
-
-    Lsegtree(ll n, T identity_element, U identity_update){ this->n = n; this->identity_element = identity_element; this->identity_update = identity_update; st.assign(4*n,identity_element); lazy.assign(4*n, identity_update);}
-    
+    Lsegtree() {}
+    Lsegtree(ll n, T identity_element, U identity_update){
+        init(n,identity_element,identity_update);
+    }
+    void init(ll n, T identity_element, U identity_update){ this->n = n; this->identity_element = identity_element; this->identity_update = identity_update; st.assign(4*n,identity_element); lazy.assign(4*n, identity_update);}
     
     // Combine two nodes l and r.
     T combine(T l, T r){
