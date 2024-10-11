@@ -1,66 +1,106 @@
-template<class T, class U>
-struct segtree{
-    ll n; vector<T>st; T identity_element;
-    // Definition of identity_element: the element I such that combine(x,I) = x
-
-    segtree() {}
-    segtree(ll n,T identity_element){
-        init(n,identity_element);
-    }
-    void init(ll n, T identity_element){ this->n = n; this->identity_element = identity_element; st.assign(4*n,identity_element);}
-    
-    // Combine two nodes l and r.
-    T combine(T l, T r){
-        T ans = (l+r);	       // Sum
-        // T ans = min(l,r);	   // Min
-        // T ans = max(l,r);	   // Max
-        return ans;
-    }
-    
-    // Apply update upd to node curr.
-    T apply(T curr, U upd){
-        // T ans = upd;             	  // set to upd
-        T ans = curr + upd;        // increment by upd
-        return ans;
-    }
-
-    void buildUtil(ll v, ll tl, ll tr, vector<T>&a){
-        if(tl == tr){
-            st[v] = a[tl];
+template<class Info>
+struct SegmentTree {
+  int n;
+  std::vector<Info> info;
+  SegmentTree() : n(0) {}
+  SegmentTree(int n_, Info v_ = Info()) {
+    init(n_, v_);
+  }
+  template<class T>
+  SegmentTree(std::vector<T> init_) {
+    init(init_);
+  }
+  void init(int n_, Info v_ = Info()) {
+    init(std::vector(n_, v_));
+  }
+  template<class T>
+  void init(std::vector<T> init_) {
+    n = init_.size();
+    info.assign(4 << std::__lg(n), Info());
+    std::function<void(int, int, int)> build = [&](int p, int l, int r) {
+        if (r - l == 1) {
+            info[p] = init_[l];
             return;
         }
-        ll tm = (tl + tr)>>1;
-        buildUtil(2*v + 1, tl, tm,a);
-        buildUtil(2*v + 2,tm+1,tr,a);
-        st[v] = combine(st[2*v + 1], st[2*v + 2]);
+        int m = (l + r) / 2;
+        build(2 * p, l, m);
+        build(2 * p + 1, m, r);
+        pull(p);
+    };
+    build(1, 0, n);
+  }
+  void pull(int p) {
+    info[p] = info[2 * p] + info[2 * p + 1];
+  }
+  void modify(int p, int l, int r, int x, const Info &v) {
+    if (r - l == 1) {
+      info[p] = v;
+      return;
     }
+    int m = (l + r) / 2;
+    if (x < m) modify(2 * p, l, m, x, v);
+    else modify(2 * p + 1, m, r, x, v);
+    pull(p);
+  }
+  void modify(int p, const Info &v) {
+    modify(1, 0, n, p, v);
+  }
+  Info rangeQuery(int p, int l, int r, int x, int y) {
+    if (l >= y || r <= x) return Info();
+    if (l >= x && r <= y) return info[p];
+    int m = (l + r) / 2;
+    return rangeQuery(2 * p, l, m, x, y) + rangeQuery(2 * p + 1, m, r, x, y);
+  }
+  Info rangeQuery(int l, int r) {
+    return rangeQuery(1, 0, n, l, r);
+  }
+  template<class F>
+  int findFirst(int p, int l, int r, int x, int y, F pred) {
+    if (l >= y || r <= x || !pred(info[p])) return -1;
+    if (r - l == 1) return l;
+    
+    int m = (l + r) / 2;
+    int res = findFirst(2 * p, l, m, x, y, pred);
+    if (res == -1) {
+      res = findFirst(2 * p + 1, m, r, x, y, pred);
+    }
+    return res;
+  }
+  template<class F>
+  int findFirst(int l, int r, F pred) {
+    return findFirst(1, 0, n, l, r, pred);
+  }
+  template<class F>
+  int findLast(int p, int l, int r, int x, int y, F pred) {
+    if (l >= y || r <= x || !pred(info[p])) return -1;
+    if (r - l == 1) return l;
 
-    T queryUtil(ll v, ll tl, ll tr, ll l, ll r){
-        if(l > r) return identity_element;
-        if(tr < l or tl > r) return identity_element;
-        if(l <= tl and r >= tr) return st[v];
-        ll tm = (tl + tr)>>1;
-        return combine(queryUtil(2*v+1,tl,tm,l,r), queryUtil(2*v+2,tm+1,tr,l,r));
+    int m = (l + r) / 2;
+    int res = findLast(2 * p + 1, m, r, x, y, pred);
+    if (res == -1) {
+      res = findLast(2 * p, l, m, x, y, pred);
     }
-    void updateUtil(ll v, ll tl, ll tr, ll pos, U upd){
-        if(tl == tr){
-            st[v] = apply(st[v],upd);
-            return;
-        }
-        ll tm = (tl + tr)>>1;
-        if(pos<= tm) updateUtil(2*v+1,tl,tm,pos,upd);
-        else updateUtil(2*v+2,tm+1,tr,pos,upd);
-        st[v] = combine(st[2*v + 1], st[2*v+2]);
-    }
-
-    void build(vector<T>a){
-        assert( (ll)a.size() == n);
-        buildUtil(0,0,n-1,a);
-    }
-    T query(ll l, ll r){
-        return queryUtil(0,0,n-1,l,r);
-    }
-    void update(ll pos, U upd){
-        updateUtil(0,0,n-1,pos,upd);
-    }
+    return res;
+  }
+  template<class F>
+  int findLast(int l, int r, F pred) {
+    return findLast(1, 0, n, l, r, pred);
+  }
 };
+struct Tag {
+  int add = 0;
+  
+  void apply(const Tag &t) & {
+    add += t.add;
+  }
+};
+struct Info {
+  int mn = 1e9;
+  void apply(const Tag &t) & {
+    mn += t.add;
+  }
+};
+ 
+Info operator+(Info &l, Info &r) {
+  return min(l.mn, r.mn);
+}
