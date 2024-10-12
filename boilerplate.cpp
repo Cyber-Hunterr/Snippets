@@ -1,6 +1,7 @@
 /**
  *    Author:  Rohit Meena
  *    Created: 12.10.2024 01:22:43
+ *    Link: https://github.com/Cyber-Hunterr/Snippets
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -48,7 +49,7 @@ void precompute(){
   
 }
 void solve(){
-  
+  ${0}
 }
 
 int main() {
@@ -60,7 +61,7 @@ int main() {
     freopen("error.txt","w",stderr);
   #endif
   int tc=1;
-  cin>>tc;
+  ${1}cin>>tc;
   precompute();
   for(int i = 1; i <= tc; i++){
     // cout<<"Case #"<<i<<": ";

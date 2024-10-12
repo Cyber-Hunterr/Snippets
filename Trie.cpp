@@ -1,3 +1,5 @@
+#include <bits/stdc++.h>
+using namespace std;
 struct Trie{
     static const int ALPHA = 26;    //Number of alphabets;
     static const char c = 'a';      //Starting alphabet;
