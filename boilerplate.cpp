@@ -1,6 +1,6 @@
 /**
  *    Author:  Rohit Meena
- *    Created: 12.10.2024 01:22:43
+ *    Created: $CURRENT_DATE.$CURRENT_MONTH.$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND
  *    Link: https://github.com/Cyber-Hunterr/Snippets
 **/
 #include <bits/stdc++.h>
