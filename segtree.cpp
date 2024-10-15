@@ -102,5 +102,5 @@ struct Info {
 };
  
 Info operator+(Info &l, Info &r) {
-  return min(l.mn, r.mn);
+  return {min(l.mn, r.mn)};
 }
